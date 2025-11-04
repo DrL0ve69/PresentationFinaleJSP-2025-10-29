@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/head :: head('À Propos de Nous')">
+    <style>
+        /* Styles additionnels pour cette page si nécessaire */
+        .hero-jumbotron {
+            background-color: #e9ecef;
+            padding: 6rem 3rem;
+            margin-bottom: 2rem;
+            border-radius: .3rem;
+        }
+        .feature-card {
+            min-height: 300px;
+        }
+    </style>
+</head>
+
+<body style="padding-top: 60px;">
+<div th:replace="fragments/client-nav :: clientNav"></div>
+
+<main class="container my-5">
+
+    <div class="hero-jumbotron text-center shadow-sm">
+        <h1 class="display-4 fw-bold text-primary"><i class="bi bi-info-circle-fill me-2"></i> À Propos de Nous : Le Projet MonShop</h1>
+        <hr class="my-4">
+        <p class="lead">
+            Ce site de commerce électronique fictif, **MonShop**, est l'aboutissement du projet final pour le cours Sécurité des applications Web en JSP. Il a été conçu pour démontrer la maîtrise des technologies clés du développement web moderne et des exigences de sécurité.
+        </p>
+        <p class="text-muted mb-0">
+            Notre objectif : Offrir une plateforme e-commerce intuitive, conviviale et fiable, en assurant une gestion sécurisée des données et des utilisateurs.
+        </p>
+    </div>
+
+    <section class="mt-5">
+        <h2 class="text-center mb-5 text-secondary">Technologies et fonctionnalités clés du projet</h2>
+
+        <div class="row g-4">
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 shadow feature-card border-success">
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <i class="bi bi-shop fs-2 text-success"></i>
+                        </div>
+                        <h4 class="card-title text-success fw-bold">1. Expérience E-commerce & Logique Serveur</h4>
+                        <hr>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i> **Spring MVC & Thymeleaf:** Utilisés pour structurer l'application et générer des vues dynamiques.
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i> **JPA & Base de Données:** Exploitation complète d'une base de données relationnelle pour la gestion des produits, clients, factures & roles.
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i> **Gestion du Panier (Session):** L'ajout de produits utilise la variable de session pour maintenir l'état du panier entre les requêtes.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 shadow feature-card border-info">
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <i class="bi bi-code-slash fs-2 text-info"></i>
+                        </div>
+                        <h4 class="card-title text-info fw-bold">2. Interactivité & Fiabilité du code</h4>
+                        <hr>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle-fill text-info me-2"></i> **Appels Asynchrones (ASYNC/RESPONSE):** Le panier est géré via des appels async (async function panier.js) & ResponseEntity pour une expérience utilisateur fluide sans rechargement de page.
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle-fill text-info me-2"></i> **Gestion des Exceptions:** Mise en place de contrôleurs et de pages pour afficher des messages d'erreurs clairs et précis en cas de problème.
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle-fill text-info me-2"></i> **Validation des Données:** Toutes les entrées(ou presque :p) utilisateur sont validées pour assurer la qualité et la fiabilité de l'application.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 mx-auto">
+                <div class="card h-100 shadow feature-card border-danger">
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <i class="bi bi-shield-lock-fill fs-2 text-danger"></i>
+                        </div>
+                        <h4 class="card-title text-danger fw-bold">3. Sécurité et Administration des rôles</h4>
+                        <hr>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle-fill text-danger me-2"></i> **Authentification & Autorisation:** Système complet de gestion des logins et des rôles (**Client** et **admin**) pour contrôler l'accès.
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle-fill text-danger me-2"></i> **Outils d'Administration (CRUD):** L'administrateur dispose de pages dédiées pour effectuer des opérations **CRUD** (Création, Lecture, Mise à jour, Suppression) sur :
+                                <ul>
+                                    <li>Les Produits;</li>
+                                    <li>Les Clients;</li>
+                                    <li>Les Factures.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/head :: head('Login')"></head>
+
+<body>
+<!-- Barre de navigation -->
+<div th:replace="fragments/client-nav :: clientNav"></div>
+
+<!-- Contenu dynamique ici -->
+<main class="container mt-5 pt-5" id="main-content">
+
+    <h1>Login</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white text-center">
+                    <h2 class="h4 mb-0"><i class="bi bi-box-arrow-in-right me-2"></i> Connexion</h2>
+                </div>
+                <div class="card-body p-4">
+
+                    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                        <span th:text="${errorMessage}">Nom d’utilisateur ou mot de passe invalide</span>
+                    </div>
+
+                    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                        <span th:text="${successMessage}">Inscription réussie! Veuillez vous connecter.</span>
+                    </div>
+
+                    <form th:action="@{/Home/perform_login}" method="post">
+
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Nom d'utilisateur :</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Mot de passe :</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 mt-3">
+                            <i class="bi bi-lock-fill me-1"></i> Se connecter
+                        </button>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    Pas encore de compte ? <a th:href="@{/Home/register}">S'inscrire ici</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

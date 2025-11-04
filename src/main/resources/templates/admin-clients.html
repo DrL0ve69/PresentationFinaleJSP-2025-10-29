@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/head :: head('Gestion des Clients')"></head>
+<body style="padding-top: 60px;">
+
+<div th:replace="fragments/client-nav :: clientNav"></div>
+
+<main class="container my-5">
+    <h2 class="mb-4 text-primary"><i class="bi bi-people-fill me-2"></i> Gestion des Comptes Clients</h2>
+    <hr>
+
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover shadow-sm">
+            <thead class="table-dark">
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Date de Naissance</th>
+                <th>Rôles</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="client : ${clients}">
+                <td th:text="${client.username}">user123</td>
+                <td th:text="${client.email}">user@example.com</td>
+                <td th:text="${#temporals.format(client.dateNaissance, 'yyyy-MM-dd')}">2000-01-01</td>
+                <td>
+                <span th:each="role : ${client.roles}"
+                    class="badge me-1 text-dark"
+
+
+                    th:classappend="${
+                    role.nomRole == 'admin' ? 'bg-danger' :
+                    (role.nomRole == 'Client' ? 'bg-primary' :
+                    (role.nomRole == 'roleSecret' ? 'bg-info' :
+                    'bg-secondary'))
+                    }"
+
+                    th:title="${'Role: ' + role.nomRole}">
+
+
+
+                    <i th:class="${
+                    role.nomRole == 'admin' ? 'bi bi-shield-fill' :
+                    (role.nomRole == 'Client' ? 'bi bi-person-fill' :
+                    (role.nomRole == 'roleSecret' ? 'bi bi-incognito' :
+                    'bi bi-tag-fill'))
+                    }" class="me-1"></i>
+
+                    <span th:text="${role.nomRole}">ROLE_NAME</span>
+                </span>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-info me-2" disabled><i class="bi bi-pencil"></i> Modifier</button>
+
+                    <button type="button"
+                            class="btn btn-sm btn-success me-2"
+                            data-bs-toggle="modal"
+                            data-bs-target="#roleModal"
+                            th:attr="data-client-username=${client.username}">
+                        <i class="bi bi-person-gear"></i> Gérer Rôles
+                    </button>
+
+                    <a th:href="@{/admin/clients/supprimer/{username}(username=${client.username})}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce compte client ?')">
+                        <i class="bi bi-trash"></i> Supprimer
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal fade" id="roleModal" tabindex="-1" aria-labelledby="roleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="roleModalLabel">Assigner un Rôle à <span id="modal-username-placeholder"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="roleForm" th:action="@{/admin/clients/assignRole}" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="username" id="modal-username-input">
+
+                        <div class="mb-3">
+                            <label for="selectRole" class="form-label">**Rôle Existant**</label>
+                            <select class="form-select" id="selectRole" name="roleName">
+                                <option value="">-- Choisir un Rôle --</option>
+                                <option th:each="role : ${allRoles}"
+                                        th:value="${role.nomRole}"
+                                        th:text="${role.nomRole}">
+                                    ROLE_NAME
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="text-center my-3">
+                            <span class="text-muted fw-bold">OU</span>
+                            <hr class="mt-1">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="newRoleInput" class="form-label">**Nouveau Rôle à Créer**</label>
+                            <input type="text" class="form-control" id="newRoleInput" placeholder="Ex: secretRole">
+                            <small class="form-text text-muted">Laisser ce champ vide si vous choisissez un rôle existant.</small>
+                        </div>
+
+                        <div id="roleError" class="alert alert-danger d-none" role="alert"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-success" id="submitRoleButton"><i class="bi bi-person-up me-1"></i> Assigner Rôle</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Pour l'ajout de rôles!!!
+        document.addEventListener('DOMContentLoaded', function()
+        {
+            const roleModal = document.getElementById('roleModal');
+            const selectRole = document.getElementById('selectRole');
+            const newRoleInput = document.getElementById('newRoleInput');
+            const roleForm = document.getElementById('roleForm');
+            const roleError = document.getElementById('roleError');
+
+            // 1. Update du modal sur le show de bootstrap
+            roleModal.addEventListener('show.bs.modal', function(event)
+            {
+                const button = event.relatedTarget;
+                const username = button.getAttribute('data-client-username');
+
+                document.getElementById('modal-username-placeholder').textContent = username;
+                document.getElementById('modal-username-input').value = username;
+
+                // Reset cas d'erreur
+                selectRole.value = "";
+                newRoleInput.value = "";
+                roleError.classList.add('d-none');
+            });
+
+            // 2. Pour le from
+            roleForm.addEventListener('submit', function(event)
+            {
+                const selectedRole = selectRole.value.trim();
+                const newRole = newRoleInput.value.trim();
+
+                const isSelectEmpty = selectedRole === "";
+                const isNewRoleEmpty = newRole === "";
+
+                // Validation: Un ou l'autre!!!
+                if ((isSelectEmpty && isNewRoleEmpty) || (!isSelectEmpty && !isNewRoleEmpty))
+                {
+                    event.preventDefault(); // Arrête la soumission
+                    roleError.textContent = "Veuillez choisir un rôle existant OU entrer un nouveau rôle, mais pas les deux.";
+                    roleError.classList.remove('d-none');
+                }
+                else
+                {
+                    roleError.classList.add('d-none');
+
+                    // Si le inpunt n'est pas vide on ajoute
+                    if (!isNewRoleEmpty) {
+                        // Le hidden input pour l'envoie
+                        const hiddenRoleInput = document.createElement('input');
+                        hiddenRoleInput.type = 'hidden';
+                        hiddenRoleInput.name = 'roleName';
+                        hiddenRoleInput.value = newRole;
+                        roleForm.appendChild(hiddenRoleInput);
+
+                        // On s'assure d'enlever l'autre rôle
+                        selectRole.disabled = true;
+                    }
+                    // Envoie du formulaire
+                }
+            });
+        });
+    </script>
+
+</main>
+
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

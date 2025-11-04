@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" data-bs-theme="dark">
+<head th:replace="fragments/head :: head('Panier')"></head>
+
+<body>
+<!-- Barre de navigation -->
+<div th:replace="fragments/client-nav :: clientNav"></div>
+
+<!-- Contenu dynamique ici -->
+<main class="container mt-5 pt-5" id="main-content">
+
+    <div class="container mt-5">
+
+        <h1 class="mb-4">Votre Panier</h1>
+
+        <div id="panier-empty-alert" th:style="${#lists.isEmpty(produits) ? 'display: block;' : 'display: none;'}">
+            <div class="alert alert-info">Votre panier est vide.</div>
+        </div>
+
+        <div id="panier-full-content" th:style="${#lists.isEmpty(produits) ? 'display: none;' : 'display: block;'}">
+            <table id="panier-table" class="table table-striped align-middle">
+                <thead>
+                <tr>
+                    <th>Produit</th>
+                    <th>Prix Unitaire</th>
+                    <th>Quantité</th>
+                    <th>Sous-total</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="produitVM : ${produits}">
+                    <td th:text="${produitVM.produit.nom}">Nom</td>
+                    <td th:text="${produitVM.produit.getPrixUnitaire()}">Prix</td>
+                    <td th:text="${produitVM.quantite}">Qté</td>
+                    <td th:text="${produitVM.produit.getPrixUnitaire() * produitVM.quantite}">Sous-total</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-success btn-sm"
+                                    th:attr="data-id=${produitVM.produit.idProduit}"
+                                    onclick="ajouterAuPanier(this);afficherPanier();">
+                                <i class="bi bi-plus"></i>
+                            </button>
+                            <button type="button" class="btn btn-warning btn-sm"
+                                    th:attr="data-id=${produitVM.produit.idProduit}"
+                                    onclick="retirerDuPanier(this);afficherPanier();">
+                                <i class="bi bi-dash"></i>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm"
+                                    th:attr="data-id=${produitVM.produit.idProduit}"
+                                    onclick="supprimerProduit(this);afficherPanier();">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="2"><strong>Total articles :</strong></td>
+                    <td id="panier-total-items"  colspan="1"></td>
+
+                    <td id="panier-total"  colspan="2"></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button class="btn btn-danger btn-sm" onclick="viderPanier()">
+                            Vider le panier
+                        </button>
+                    </td>
+                    <td colspan="2" class="text-end">
+                        <button class="btn btn-primary" onclick="passerCommande()">
+                            Passer la commande
+                            <i class="bi bi-check-circle"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

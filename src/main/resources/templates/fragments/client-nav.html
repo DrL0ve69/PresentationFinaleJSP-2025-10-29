@@ -1,0 +1,126 @@
+<div th:fragment="clientNav" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-lg fixed-top border-bottom border-primary border-2">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/Home/accueil}">
+                <i class="bi bi-shop fs-3 me-2 text-primary"></i>
+                <span class="fw-bold text-light">MonShop</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+                <ul class="navbar-nav me-auto align-items-lg-center">
+
+                    <li class="nav-item dropdown" sec:authorize="hasAuthority('admin')">
+                        <a class="btn btn-warning btn-sm dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-shield-lock-fill me-1"></i> Admin
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="adminDropdown">
+                            <li>
+                                <a class="dropdown-item" th:href="@{/admin/produits}">
+                                    <i class="bi bi-box me-1"></i> Gestion des Produits
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" th:href="@{/admin/clients}">
+                                    <i class="bi bi-people me-1"></i> Gestion des Clients
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" th:href="@{/admin/factures}">
+                                    <i class="bi bi-receipt me-1"></i> Gestion des Factures
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" th:href="@{/Home/profil}">
+                                    <i class="bi bi-person-circle me-1"></i> Mon Profil
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" th:href="@{/Home/all-produits}">
+                                    <i class="bi bi-list-ul me-1"></i> Full Catalogue
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" th:href="@{/Home/about-us}">
+                                    <i class="bi bi-info-circle me-1"></i> À Propos de Nous
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" th:href="@{/Home/accueil}">
+                                    <i class="bi bi-house me-1"></i> Retour à l'Accueil
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item" sec:authorize="!hasAuthority('admin')">
+                        <a class="nav-link" th:href="@{/Home/all-produits}">
+                            <i class="bi bi-list-ul me-1"></i> Nos produits
+                        </a>
+                    </li>
+
+                    <li class="nav-item" sec:authorize="!hasAuthority('admin')">
+                        <a class="nav-link" th:href="@{/Home/about-us}">
+                            <i class="bi bi-info-circle me-1"></i> À propos
+                        </a>
+                    </li>
+
+                    <li class="nav-item" sec:authorize="!hasAuthority('admin') and isAuthenticated()">
+                        <a class="nav-link" th:href="@{/Home/profil}">
+                            <i class="bi bi-person-circle me-1"></i> Profil
+                        </a>
+                    </li>
+
+                </ul>
+
+                <ul class="navbar-nav align-items-lg-center">
+                    <li class="nav-item me-4 me-lg-0">
+                        <a class="nav-link position-relative p-2" th:href="@{/panier/afficherPanier}">
+                            <i class="bi bi-cart4 fs-5 text-light"></i>
+                            <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle border border-light" id="panier-count" style="font-size: 0.65em; padding: 0.4em 0.5em;">0</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item me-2" sec:authorize="isAnonymous()">
+                        <a class="btn btn-outline-light" th:href="@{/Home/login}">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Se connecter
+                        </a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="btn btn-primary" th:href="@{/Home/register}">
+                            <i class="bi bi-person-plus-fill me-1"></i> S'inscrire
+                        </a>
+                    </li>
+
+                    <li class="nav-item me-3" sec:authorize="isAuthenticated()">
+                        <a class="nav-link text-white" th:href="@{/Home/profil}">
+                            <i class="bi bi-person-circle me-1"></i> Bonjour <b sec:authentication="name"></b>
+                        </a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="btn btn-outline-secondary">
+                                <i class="bi bi-power me-1"></i> Déconnexion
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<!--
+    <div th:switch="${user.role}">
+        <p th:case="'ADMIN'">User is an administrator.</p>
+        <p th:case="'USER'">User is a standard user.</p>
+        <p th:case="*">User has an unknown role.</p>
+    </div>
+-->
+

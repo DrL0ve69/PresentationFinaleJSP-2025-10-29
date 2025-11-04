@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" data-bs-theme="dark">
+<head th:replace="fragments/head :: head('Accès Refusé')"></head>
+
+<body>
+<div th:replace="fragments/client-nav :: clientNav"></div>
+
+<main class="container mt-5 pt-5" id="main-content">
+
+    <div class="container mt-5">
+
+        <div class="p-5 mb-4 bg-danger-subtle rounded-3 text-center shadow-lg border border-danger">
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold text-danger">🚫 Accès Refusé</h1>
+
+                <p class="col-md-8 fs-4 mx-auto text-dark-emphasis">
+                    Désolé, vous n'êtes pas autorisé à consulter cette page.
+                    Veuillez vérifier vos permissions ou vous connecter avec un compte approprié.
+                </p>
+
+                <a th:href="@{/Home/accueil}" class="btn btn-warning btn-lg mt-3" role="button">
+                    <i class="bi bi-arrow-left-circle me-2"></i> Retour à l'accueil
+                </a>
+
+                <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" class="d-inline-block ms-3">
+                    <button type="submit" class="btn btn-outline-danger btn-lg mt-3">
+                        <i class="bi bi-power me-2"></i> Déconnexion
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>
